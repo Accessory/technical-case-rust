@@ -1,0 +1,46 @@
+[package]
+name = "technical-case-rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = { version = "0", features = ["tokio", "tower-log", "query", "json"] }
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+sqlx = { version = "0.7", features = [
+    "runtime-tokio-rustls",
+    "any",
+    "postgres",
+    "chrono",
+    "migrate",
+    "macros"
+] }
+dotenvy = "0.15"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0"
+serde_merge = "0"
+chrono = { version = "0.4", features = ["serde"] }
+utoipa = { version = "4", features = [
+    "axum_extras",
+    "chrono",
+    "uuid",
+    "openapi_extensions",
+] }
+utoipa-swagger-ui = { version = "4", features = ["axum"] }
+hyper = { version = "0", features = ["server"] }
+clap = { version = "4", features = ["derive", "env"] }
+
+[dev-dependencies]
+tokio-macros ={ version = "2"}
+tower = { version = "0.4", features = ["util"] }
+hyper = { version = "0.14", features = ["full"] }
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+strip = "symbols"

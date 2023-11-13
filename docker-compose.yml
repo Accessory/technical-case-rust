@@ -1,0 +1,30 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "55432:5432"
+    volumes:
+      - progresDB:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - postgres
+  backend:
+    build: .
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env
+    networks:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://tibber:tibber@postgres:5432/Robot
+      - IP=0.0.0.0
+volumes:
+  progresDB:
+networks:
+  postgres:
+    driver: bridge
+    expose: true
