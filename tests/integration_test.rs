@@ -11,7 +11,7 @@ use technical_case_rust::{
     models::robot_status::RobotStatus,
     open_api::ApiDoc,
     requests::enter_path_request::{Commmand, EnterPathRequest},
-    robot::{map_direction::MapDirection, map_point::MapPoint},
+    utils::{map_direction::MapDirection, map_point::MapPoint},
     service::robot_service::RobotService,
 };
 use tower::ServiceExt;
@@ -96,7 +96,7 @@ async fn enter_path(pool: PgPool) {
 
     let enter_path_request = EnterPathRequest {
         start: MapPoint::new(10, 22),
-        commmands: vec![
+        commands: vec![
             Commmand {
                 direction: MapDirection::East,
                 steps: 2,

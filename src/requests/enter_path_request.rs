@@ -1,16 +1,16 @@
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
-use crate::robot::{map_direction::MapDirection, map_point::MapPoint};
+use crate::utils::position::Position;
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct EnterPathRequest {
-    pub start: MapPoint,
-    pub commmands: Vec<Commmand>,
+    pub start: Position,
+    pub commands: Vec<Command>,
 }
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
-pub struct Commmand {
-    pub direction: MapDirection,
+pub struct Command {
+    pub direction: String,
     pub steps: usize,
 }

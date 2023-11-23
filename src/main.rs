@@ -4,7 +4,7 @@ mod controller;
 mod models;
 mod open_api;
 mod requests;
-mod robot;
+mod utils;
 mod service;
 
 use axum::{response::Redirect, routing::get, Router};

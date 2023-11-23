@@ -8,7 +8,7 @@ pub struct Configuration {
     pub ip: String,
     #[arg(long, default_value = "5000", env)]
     pub port: u16,
-    #[arg(long, default_value = "postgres://localhost:5432/Robot", env)]
+    #[arg(long, default_value = "postgres://localhost:5432/RustRobot", env)]
     pub database_url: String,
     #[arg(long)]
     pub config_file: Option<String>,

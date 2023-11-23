@@ -1,7 +1,7 @@
 use crate::controller;
 use crate::models;
 use crate::requests;
-use crate::robot;
+use crate::utils;
 use utoipa::OpenApi;
 
 // OpenApi
@@ -18,9 +18,8 @@ use utoipa::OpenApi;
     components(schemas(
             models::robot_status::RobotStatus,
             requests::enter_path_request::EnterPathRequest,
-            requests::enter_path_request::Commmand,
-            robot::map_point::MapPoint,
-            robot::map_direction::MapDirection
+            requests::enter_path_request::Command,
+            utils::position::Position,
         ))
 )]
 pub struct ApiDoc;
