@@ -10,9 +10,9 @@ use technical_case_rust::{
     controller::tibber_developer_test,
     models::robot_status::RobotStatus,
     open_api::ApiDoc,
-    requests::enter_path_request::{Commmand, EnterPathRequest},
-    utils::{map_direction::MapDirection, map_point::MapPoint},
+    requests::enter_path_request::{Command, EnterPathRequest},
     service::robot_service::RobotService,
+    utils::position::Position,
 };
 use tower::ServiceExt;
 use utoipa::OpenApi;
@@ -95,14 +95,14 @@ async fn enter_path(pool: PgPool) {
     tracing::debug!("listening on {}", addr);
 
     let enter_path_request = EnterPathRequest {
-        start: MapPoint::new(10, 22),
+        start: Position { x: 10, y: 22 },
         commands: vec![
-            Commmand {
-                direction: MapDirection::East,
+            Command {
+                direction: "east".to_owned(),
                 steps: 2,
             },
-            Commmand {
-                direction: MapDirection::North,
+            Command {
+                direction: "north".to_owned(),
                 steps: 1,
             },
         ],
