@@ -6,7 +6,13 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = { version = "0", features = ["tokio", "tower-log", "query", "json"] }
+axum = { version = "0", features = [
+    "tokio",
+    "tower-log",
+    "query",
+    "json",
+    "macros",
+] }
 tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
@@ -16,7 +22,7 @@ sqlx = { version = "0.7", features = [
     "postgres",
     "chrono",
     "migrate",
-    "macros"
+    "macros",
 ] }
 dotenvy = "0.15"
 serde = { version = "1", features = ["derive"] }
@@ -30,14 +36,14 @@ utoipa = { version = "4", features = [
     "uuid",
     "openapi_extensions",
 ] }
-utoipa-swagger-ui = { version = "4", features = ["axum"] }
-hyper = { version = "0", features = ["server"] }
+utoipa-swagger-ui = { version = "5", features = ["axum"] }
+hyper = { version = "1", features = ["server"] }
 clap = { version = "4", features = ["derive", "env"] }
 
 [dev-dependencies]
-tokio-macros ={ version = "2"}
-tower = { version = "0.4", features = ["util"] }
-hyper = { version = "0.14", features = ["full"] }
+tokio-macros = { version = "2" }
+tower = { version = "0.4", features = ["full"] }
+hyper = { version = "1", features = ["full"] }
 
 [profile.dev.package."*"]
 opt-level = 3

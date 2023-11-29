@@ -4,8 +4,8 @@ mod controller;
 mod models;
 mod open_api;
 mod requests;
-mod utils;
 mod service;
+mod utils;
 
 use axum::{response::Redirect, routing::get, Router};
 use clap::Parser;
@@ -44,7 +44,9 @@ async fn main() {
         .expect("Can't connect to database");
 
     let app_state = Arc::new(AppState { db: pool.clone() });
-    let robot_service: Arc<RobotService> = Arc::new(RobotService{state: app_state.clone()});
+    let robot_service: Arc<RobotService> = Arc::new(RobotService {
+        state: app_state.clone(),
+    });
 
     // build our application with some routes
     let app = Router::new()
@@ -62,15 +64,9 @@ async fn main() {
         &config.ip
     };
     let addr = format!("{}:{}", ip, config.port);
-    tracing::debug!("listening on {}", addr);
-    axum::Server::bind(
-        &addr
-            .parse()
-            .expect(&format!("Could not resolve address from {}", addr)),
-    )
-    .serve(app.into_make_service())
-    .await
-    .unwrap();
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+    tracing::debug!("listening on {}", listener.local_addr().unwrap());
+    axum::serve(listener, app).await.unwrap();
 }
 
 fn init_configuration() -> Configuration {

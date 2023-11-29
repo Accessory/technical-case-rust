@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use chrono::Utc;
+use chrono::NaiveDateTime;
 use tokio::time::Instant;
 
 use crate::{
@@ -19,18 +19,13 @@ impl RobotService {
         &self,
         mut robot_status: RobotStatus,
     ) -> Result<RobotStatus, sqlx::Error> {
-        let next_id: i64 = sqlx::query_scalar("Select nextval('jobs_id_seq')")
-            .fetch_one(&self.state.db)
-            .await?;
-        robot_status.id = next_id;
-
-        sqlx::query("INSERT INTO public.jobs(id, \"timestamp\", commands, result, duration) VALUES ($1,$2, $3, $4, $5);")
-        .bind(robot_status.id)
-        .bind(robot_status.timestamp)
+        robot_status = sqlx::query_as(
+            "INSERT INTO public.jobs(commands, result, duration) VALUES ($1, $2, $3) returning *;",
+        )
         .bind(robot_status.commands)
         .bind(robot_status.result)
         .bind(robot_status.duration)
-        .execute(&self.state.db)
+        .fetch_one(&self.state.db)
         .await?;
 
         Ok(robot_status)
@@ -109,7 +104,7 @@ impl RobotService {
 
         RobotStatus {
             id: 0,
-            timestamp: Utc::now().naive_utc(),
+            timestamp: NaiveDateTime::MIN,
             commands: request.commands.len() as i64,
             result: sum - intersection,
             duration: elapsed.as_secs_f64(),

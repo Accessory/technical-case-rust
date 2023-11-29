@@ -3,9 +3,8 @@ use std::sync::Arc;
 use axum::{
     extract::{self, State},
     routing::{get, post},
-    Json, Router,
+    Json, Router, http::StatusCode,
 };
-use hyper::StatusCode;
 use tracing::warn;
 
 use crate::{
@@ -29,6 +28,7 @@ pub fn new_router(robot_service: Arc<RobotService>) -> Router {
     ),
     context_path = "/tibber-developer-test"
 )]
+#[axum::debug_handler]
 pub async fn enter_path(
     State(robot_service): State<Arc<RobotService>>,
     extract::Json(req): extract::Json<EnterPathRequest>,
