@@ -1,6 +1,7 @@
 #!/bin/sh
+set -e
 echo "Start migration"
-sqlx database create --database-url "$DATABASE_URL"
-sqlx migrate run --database-url "$DATABASE_URL"
+/bin/sqlx database create --database-url "$DATABASE_URL"
+/bin/sqlx migrate run --database-url "$DATABASE_URL" --source /usr/migrations
 echo "Start Backend"
-cargo run --release
+/bin/technical-case-rust

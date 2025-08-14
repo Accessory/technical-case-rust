@@ -10,20 +10,13 @@ pub struct Configuration {
     pub port: u16,
     #[arg(long, default_value = "postgres://localhost:5432/RustRobot", env)]
     pub database_url: String,
-    #[arg(long)]
-    pub config_file: Option<String>,
 }
 
 impl std::fmt::Display for Configuration {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "ip: {}", &self.ip)?;
         writeln!(f, "port: {}", &self.port)?;
-        writeln!(f, "database_url: {}", &self.database_url)?;
-        writeln!(
-            f,
-            "config_file: {}",
-            &self.config_file.as_ref().unwrap_or(&String::from(""))
-        )
+        writeln!(f, "database_url: {}", &self.database_url)
     }
 }
 

@@ -3,9 +3,7 @@ Simple Webapplication made with Axum
 
 ## Details
 Default Database: Postgres
-Default Database Name: Robot
-Default Username: tibber
-Default Password: tibber
+Default Database Name: rust-robot
 
 ## Quickstart
 ### Build

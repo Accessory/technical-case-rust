@@ -10,16 +10,15 @@ mod utils;
 use axum::{response::Redirect, routing::get, Router};
 use clap::Parser;
 use configuration::Configuration;
-use serde_merge::omerge;
 use sqlx::postgres::PgPoolOptions;
 use tracing_subscriber::{filter, layer::SubscriberExt, util::SubscriberInitExt, Layer};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
-use std::{fs::File, io::BufReader, sync::Arc, time::Duration};
+use std::{sync::Arc, time::Duration};
 
 use crate::{
-    app_state::AppState, configuration::FileConfiguration, controller::tibber_developer_test,
+    app_state::AppState, controller::tibber_developer_test,
     open_api::ApiDoc, service::robot_service::RobotService,
 };
 
@@ -70,15 +69,7 @@ async fn main() {
 }
 
 fn init_configuration() -> Configuration {
-    let mut configuration = Configuration::parse();
-    if configuration.config_file.is_some() {
-        let cf = configuration.config_file.as_ref().unwrap();
-        let file = File::open(cf).expect("Failed to open the configuration File at: {cf}");
-        let reader = BufReader::new(file);
-        let config: FileConfiguration =
-            serde_yaml::from_reader(reader).expect("Config file could not be parsed");
-        configuration = omerge(configuration, config).expect("Failed to merge configs");
-    }
+    let configuration = Configuration::parse();
     println!("{}", &configuration);
     configuration
 }

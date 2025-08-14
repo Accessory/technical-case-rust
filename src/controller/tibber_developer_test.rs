@@ -2,14 +2,16 @@ use std::sync::Arc;
 
 use axum::{
     extract::{self, State},
+    http::StatusCode,
     routing::{get, post},
-    Json, Router, http::StatusCode,
+    Json, Router,
 };
 use tracing::warn;
 
 use crate::{
-    models::robot_status::RobotStatus, requests::enter_path_request::EnterPathRequest,
-    service::robot_service::{RobotService, self},
+    models::robot_status::RobotStatus,
+    requests::enter_path_request::EnterPathRequest,
+    service::robot_service::{self, RobotService},
 };
 
 pub fn new_router(robot_service: Arc<RobotService>) -> Router {
@@ -33,7 +35,7 @@ pub async fn enter_path(
     State(robot_service): State<Arc<RobotService>>,
     extract::Json(req): extract::Json<EnterPathRequest>,
 ) -> Result<Json<RobotStatus>, StatusCode> {
-    let robot_status:RobotStatus = robot_service::RobotService::run_path(req);
+    let robot_status: RobotStatus = robot_service::RobotService::run_path(req);
     match robot_service.save_robot_status(robot_status).await {
         Ok(status) => Ok(Json(status)),
         Err(err) => {

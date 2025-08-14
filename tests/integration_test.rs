@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
-use axum::Router;
-use hyper::{Body, Request};
+use axum::{body::{to_bytes, Body}, Router};
+use hyper::{Request};
 use serde_json::json;
 use sqlx::PgPool;
 use technical_case_rust::{
@@ -24,7 +24,6 @@ async fn hallo_welt(pool: PgPool) {
         ip: "127.0.0.1".to_owned(),
         port: 55555,
         database_url: "".to_owned(),
-        config_file: None,
     };
 
     let app_state = Arc::new(AppState { db: pool.clone() });
@@ -59,7 +58,7 @@ async fn hallo_welt(pool: PgPool) {
         .await
         .unwrap();
 
-    let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
+    let body = to_bytes(response.into_body(), 1024).await.unwrap();
     assert_eq!(&body[..], b"\"Hallo Welt\"");
 }
 
@@ -69,7 +68,6 @@ async fn enter_path(pool: PgPool) {
         ip: "127.0.0.1".to_owned(),
         port: 55555,
         database_url: "".to_owned(),
-        config_file: None,
     };
 
     let app_state = Arc::new(AppState { db: pool.clone() });
@@ -123,7 +121,7 @@ async fn enter_path(pool: PgPool) {
         .await
         .unwrap();
 
-    let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
+    let body = to_bytes(response.into_body(), 1024).await.unwrap();
     let robot_status: RobotStatus = serde_json::from_slice(&body).unwrap();
     assert_eq!(robot_status.id, 1);
     assert_eq!(robot_status.commands, 2);
